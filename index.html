@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AERO BLAZE & GROUND WARRIOR'S ARENA | Kings College of Engineering</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --gold: #FFD700;
+      --gold2: #FFA500;
+      --blue-glow: #00C8FF;
+      --dark: #050A14;
+      --darker: #020609;
+      --card-bg: rgba(0, 20, 50, 0.85);
+      --drone-color: #00C8FF;
+      --robot-color: #FF6B35;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--dark);
+      color: #e0e8f0;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 12px;
+      height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, box-shadow 0.2s;
+      mix-blend-mode: difference;
+    }
+
+    .cursor.hover-effect {
+      transform: translate(-50%, -50%) scale(2.5);
+      background: var(--blue-glow);
+      box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
+      mix-blend-mode: normal;
+    }
+
+    a,
+    button {
+      cursor: none;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 200, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 255, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridScroll 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes gridScroll {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(60px);
+      }
+    }
+
+    /* Particle canvas */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3rem;
+      background: rgba(2, 6, 9, 0.92);
+      border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #7aa8c8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue-glow);
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #000;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 0.55rem 1.4rem;
+      border: none;
+      clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover {
+      opacity: 0.85;
+    }
+
+    /* HERO */
+    #hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      overflow: hidden;
+    }
+
+    .hero-bg-glow {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 100, 200, 0.18) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.15);
+        opacity: 1;
+      }
+    }
+
+    .college-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .college-name {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(0.75rem, 1.5vw, 1rem);
+      color: #7aa8c8;
+      letter-spacing: 3px;
+      margin-bottom: 2.5rem;
+      animation: fadeDown 0.8s 0.1s ease both;
+    }
+
+    .event-title-wrapper {
+      animation: fadeDown 0.8s 0.2s ease both;
+    }
+
+    .event-title-top {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      background: linear-gradient(135deg, #00C8FF 0%, #FFFFFF 40%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      letter-spacing: -1px;
+    }
+
+    .event-title-amp {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 400;
+      color: var(--gold);
+      display: block;
+      margin: 0.3rem 0;
+    }
+
+    .event-title-bottom {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.3rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--robot-color) 0%, #FFD700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+    }
+
+    .event-tagline {
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: #7aa8c8;
+      margin: 1.5rem 0 2.5rem;
+      text-transform: uppercase;
+      animation: fadeDown 0.8s 0.4s ease both;
+    }
+
+    .event-meta {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+      animation: fadeDown 0.8s 0.5s ease both;
+    }
+
+    .meta-item {
+      text-align: center;
+      padding: 1rem 1.5rem;
+      background: rgba(0, 200, 255, 0.05);
+      border: 1px solid rgba(0, 200, 255, 0.2);
+      clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+    }
+
+    .meta-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      color: #5a8aaa;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .meta-value {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeDown 0.8s 0.6s ease both;
+    }
+
+    .btn-primary {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #000;
+      border: none;
+      clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 1rem 2.5rem;
+      background: transparent;
+      color: var(--blue-glow);
+      border: 1px solid var(--blue-glow);
+      clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 200, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* SECTION BASE */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2rem;
+    }
+
+    .section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 5px;
+      color: var(--blue-glow);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .section-title span {
+      color: var(--gold);
+    }
+
+    .section-line {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--blue-glow));
+      margin: 0 auto 4rem;
+    }
+
+    /* EVENTS SECTION */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+      gap: 2px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .event-card {
+      position: relative;
+      padding: 3rem 2.5rem;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .event-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .event-card.drone {
+      background: linear-gradient(135deg, rgba(0, 30, 60, 0.95), rgba(0, 60, 100, 0.6));
+      border: 1px solid rgba(0, 200, 255, 0.3);
+      border-right: none;
+    }
+
+    .event-card.robot {
+      background: linear-gradient(135deg, rgba(40, 15, 5, 0.95), rgba(80, 30, 10, 0.6));
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      border-left: none;
+    }
+
+    .event-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .event-card.drone::before {
+      background: linear-gradient(90deg, transparent, var(--drone-color), transparent);
+    }
+
+    .event-card.robot::before {
+      background: linear-gradient(90deg, transparent, var(--robot-color), transparent);
+    }
+
+    .event-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      filter: drop-shadow(0 0 20px currentColor);
+    }
+
+    .event-card.drone .event-icon {
+      color: var(--drone-color);
+    }
+
+    .event-card.robot .event-icon {
+      color: var(--robot-color);
+    }
+
+    .event-name {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+
+    .event-card.drone .event-name {
+      color: var(--drone-color);
+    }
+
+    .event-card.robot .event-name {
+      color: var(--robot-color);
+    }
+
+    .event-subtitle {
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      color: #7aa8c8;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    /* RULES */
+    .rules-list {
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
+
+    .rules-list li {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #b8d0e0;
+    }
+
+    .rule-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      padding: 2px 6px;
+    }
+
+    .event-card.drone .rule-num {
+      color: var(--drone-color);
+      border: 1px solid rgba(0, 200, 255, 0.3);
+    }
+
+    .event-card.robot .rule-num {
+      color: var(--robot-color);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+
+    /* PRIZE */
+    .prize-grid {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .prize-item {
+      flex: 1;
+      text-align: center;
+      padding: 1rem;
+      clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    }
+
+    .event-card.drone .prize-item {
+      background: rgba(0, 200, 255, 0.08);
+      border: 1px solid rgba(0, 200, 255, 0.2);
+    }
+
+    .event-card.robot .prize-item {
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.2);
+    }
+
+    .prize-rank {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: #7aa8c8;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .prize-amount {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--gold);
+    }
+
+    /* SPECS SECTION */
+    #specs {
+      background: rgba(0, 5, 15, 0.7);
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr));
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .spec-category {}
+
+    .spec-category-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .spec-category.drone .spec-category-title {
+      color: var(--drone-color);
+      border-color: var(--drone-color);
+    }
+
+    .spec-category.robot .spec-category-title {
+      color: var(--robot-color);
+      border-color: var(--robot-color);
+    }
+
+    .spec-item {
+      margin-bottom: 1.2rem;
+      padding: 1.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid;
+      transition: background 0.2s;
+    }
+
+    .spec-category.drone .spec-item {
+      border-color: rgba(0, 200, 255, 0.4);
+    }
+
+    .spec-category.robot .spec-item {
+      border-color: rgba(255, 107, 53, 0.4);
+    }
+
+    .spec-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .spec-q {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #5a8aaa;
+      margin-bottom: 0.4rem;
+    }
+
+    .spec-question {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #d0e8f8;
+      margin-bottom: 0.4rem;
+    }
+
+    .spec-example {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: #4a7080;
+    }
+
+    .spec-category.drone .spec-example {
+      color: rgba(0, 200, 255, 0.5);
+    }
+
+    .spec-category.robot .spec-example {
+      color: rgba(255, 107, 53, 0.5);
+    }
+
+    /* REGISTER SECTION */
+    #register {
+      background: linear-gradient(180deg, rgba(0, 5, 15, 0) 0%, rgba(0, 20, 50, 0.5) 100%);
+      text-align: center;
+    }
+
+    .register-wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 4rem;
+      background: rgba(0, 10, 30, 0.8);
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .register-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--drone-color), var(--gold), var(--robot-color));
+    }
+
+    .fee-badge {
+      display: inline-block;
+      font-family: 'Orbitron', monospace;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin: 1.5rem 0;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+    }
+
+    .fee-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: #5a8aaa;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .register-note {
+      font-size: 0.9rem;
+      color: #5a8aaa;
+      margin: 1.5rem 0 2.5rem;
+      line-height: 1.7;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(0, 200, 255, 0.1);
+      background: rgba(2, 6, 9, 0.95);
+    }
+
+    .footer-college {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-dept {
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      color: #5a8aaa;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-bottom {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: #2a4055;
+    }
+
+    /* COUNTDOWN */
+    .countdown-grid {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+
+    .countdown-item {
+      text-align: center;
+      min-width: 70px;
+    }
+
+    .countdown-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--blue-glow);
+      display: block;
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(0, 200, 255, 0.4);
+    }
+
+    .countdown-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: #5a8aaa;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .event-card.drone {
+        border-right: 1px solid rgba(0, 200, 255, 0.3);
+        border-bottom: none;
+      }
+
+      .event-card.robot {
+        border-left: 1px solid rgba(255, 107, 53, 0.3);
+        border-top: none;
+      }
+
+      .register-wrapper {
+        padding: 2.5rem 1.5rem;
+      }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* TICKER */
+    .ticker-wrap {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 200, 255, 0.06);
+      border-top: 1px solid rgba(0, 200, 255, 0.15);
+      border-bottom: 1px solid rgba(0, 200, 255, 0.15);
+      overflow: hidden;
+      padding: 0.6rem 0;
+      margin-top: -1px;
+    }
+
+    .ticker {
+      display: flex;
+      white-space: nowrap;
+      animation: ticker 30s linear infinite;
+    }
+
+    .ticker-item {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      color: var(--blue-glow);
+      padding: 0 3rem;
+      text-transform: uppercase;
+    }
+
+    .ticker-item::before {
+      content: '◆ ';
+      color: var(--gold);
+    }
+
+    @keyframes ticker {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* BROCHURE MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 5, 15, 0.95);
+      z-index: 200;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      border: 1px solid var(--blue-glow);
+      box-shadow: 0 0 30px rgba(0, 200, 255, 0.2);
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      max-height: 90vh;
+      display: block;
+      object-fit: contain;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: var(--blue-glow);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--gold);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- BROCHURE MODAL HTML -->
+  <div class="modal-overlay" id="brochure-modal" onclick="closeBrochure(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeBrochure(event)">[X] CLOSE</button>
+      <img src="broucher.jpeg" alt="Event Brochure">
+    </div>
+  </div>
+
+  <div class="cursor" id="cursor"></div>
+  <canvas id="particles"></canvas>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">KINGS COLLEGE OF ENGINEERING ◆ ELECTRONICS CLUB</div>
+    <div class="nav-links">
+      <a href="#events">Events</a>
+      <a href="#specs">Specs</a>
+      <a href="#prizes">Prizes</a>
+      <a href="#" onclick="openBrochure(event)">Brochure</a>
+      <a href="#register">Register</a>
+    </div>
+    <a href="#register" class="nav-cta">REGISTER NOW</a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-glow"></div>
+    <div class="college-badge">Kings College of Engineering · Electronics Club Presents</div>
+    <div class="college-name">Department of Electronics and Communication Engineering</div>
+
+    <div class="event-title-wrapper">
+      <div class="event-title-top">AERO BLAZE</div>
+      <span class="event-title-amp">&amp;</span>
+      <div class="event-title-bottom">GROUND WARRIOR'S ARENA</div>
+    </div>
+
+    <p class="event-tagline">National Level Drone &amp; Robot Race Championship</p>
+
+    <div class="event-meta">
+      <div class="meta-item">
+        <span class="meta-label">Date</span>
+        <span class="meta-value">30 MAR 2026</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Day</span>
+        <span class="meta-value">MONDAY</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Venue</span>
+        <span class="meta-value">KINGS COLLEGE</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Entry Fee</span>
+        <span class="meta-value">₹500</span>
+      </div>
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown-grid">
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-days">00</span>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-hrs">00</span>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-min">00</span>
+        <div class="countdown-label">Mins</div>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-sec">00</span>
+        <div class="countdown-label">Secs</div>
+      </div>
+    </div>
+
+    <div class="hero-cta-group">
+      <a href="#register" class="btn-primary">⚡ REGISTER NOW — ₹500</a>
+      <a href="#events" class="btn-outline">VIEW RULES</a>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="ticker-item">AERO BLAZE — DRONE RACE</span>
+      <span class="ticker-item">GROUND WARRIOR'S ARENA — ROBOT RACE</span>
+      <span class="ticker-item">30 MARCH 2026 · MONDAY</span>
+      <span class="ticker-item">DRONE WINNER ₹10,000</span>
+      <span class="ticker-item">ROBOT WINNER ₹5,000</span>
+      <span class="ticker-item">NATIONAL LEVEL EVENT</span>
+      <span class="ticker-item">REGISTER FOR ₹500</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item">AERO BLAZE — DRONE RACE</span>
+      <span class="ticker-item">GROUND WARRIOR'S ARENA — ROBOT RACE</span>
+      <span class="ticker-item">30 MARCH 2026 · MONDAY</span>
+      <span class="ticker-item">DRONE WINNER ₹10,000</span>
+      <span class="ticker-item">ROBOT WINNER ₹5,000</span>
+      <span class="ticker-item">NATIONAL LEVEL EVENT</span>
+      <span class="ticker-item">REGISTER FOR ₹500</span>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <section id="events">
+    <div class="section-label">The Competitions</div>
+    <h2 class="section-title">Two <span>Battles</span>, One Stage</h2>
+    <div class="section-line"></div>
+
+    <div class="events-grid">
+
+      <!-- DRONE CARD -->
+      <div class="event-card drone reveal">
+        <span class="event-icon">🚁</span>
+        <h3 class="event-name">AERO BLAZE</h3>
+        <p class="event-subtitle">National Level Drone Race</p>
+
+        <h4
+          style="font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:3px;color:#5a8aaa;text-transform:uppercase;margin-bottom:1rem;">
+          Competition Rules</h4>
+        <ul class="rules-list">
+          <li><span class="rule-num">01</span> Max drone weight: 2 kg including battery.</li>
+          <li><span class="rule-num">02</span> Electric motor drones only.</li>
+          <li><span class="rule-num">03</span> Only one pilot per drone on the track at a time.</li>
+          <li><span class="rule-num">04</span> Maximum flying height allowed: 10 feet from ground level during the race.
+          </li>
+          <li><span class="rule-num">05</span> Complete the course by passing through all gates. The fastest time wins.
+          </li>
+        </ul>
+
+        <h4 id="prizes"
+          style="font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:3px;color:#5a8aaa;text-transform:uppercase;margin-bottom:1rem;">
+          Cash Prizes</h4>
+        <div class="prize-grid">
+          <div class="prize-item">
+            <span class="prize-rank">🥇 Winner</span>
+            <span class="prize-amount">₹10,000</span>
+          </div>
+          <div class="prize-item">
+            <span class="prize-rank">🥈 Runner Up</span>
+            <span class="prize-amount">₹5,000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROBOT CARD -->
+      <div class="event-card robot reveal">
+        <span class="event-icon">🤖</span>
+        <h3 class="event-name">GROUND WARRIOR'S ARENA</h3>
+        <p class="event-subtitle">National Level Robot Race</p>
+
+        <h4
+          style="font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:3px;color:#7a5030;text-transform:uppercase;margin-bottom:1rem;">
+          Competition Rules</h4>
+        <ul class="rules-list">
+          <li><span class="rule-num">01</span> Wires should remain slack during the run. Pulling the wire to help the
+            robot move or traverse the course may lead to disqualification.</li>
+          <li><span class="rule-num">02</span> If any robot starts before the official start call, the timer will be
+            restarted and the team will get a second chance. If the same mistake is repeated again, the team will be
+            disqualified.</li>
+          <li><span class="rule-num">03</span> Your robot must be ready when your team is called.</li>
+        </ul>
+
+        <h4
+          style="font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:3px;color:#7a5030;text-transform:uppercase;margin-bottom:1rem;">
+          Cash Prizes</h4>
+        <div class="prize-grid">
+          <div class="prize-item">
+            <span class="prize-rank">🥇 Winner</span>
+            <span class="prize-amount">₹5,000</span>
+          </div>
+          <div class="prize-item">
+            <span class="prize-rank">🥈 Runner Up</span>
+            <span class="prize-amount">₹3,000</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TECHNICAL SPECS / REGISTRATION QUESTIONS -->
+  <section id="specs">
+    <div class="section-label">Technical Specifications</div>
+    <h2 class="section-title">Registration <span>Details Required</span></h2>
+    <div class="section-line"></div>
+
+    <div class="specs-grid">
+
+      <!-- DRONE SPECS -->
+      <div class="spec-category drone reveal">
+        <h3 class="spec-category-title">🚁 AERO BLAZE — Drone Specs</h3>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 1</div>
+          <div class="spec-question">What is the type of your drone and its total weight?</div>
+          <div class="spec-example">eg. Quadcopter drone — 500g to 1kg</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 2</div>
+          <div class="spec-question">What type of motors are used in your drone?</div>
+          <div class="spec-example">eg. Brushless motor — 2207–2306 stator size</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 3</div>
+          <div class="spec-question">What type of battery and capacity do you use?</div>
+          <div class="spec-example">eg. Li-Po battery — 4S 1500mAh / 6S 1400mAh</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 4</div>
+          <div class="spec-question">What size propellers are used in your drone?</div>
+          <div class="spec-example">eg. 5-inch propellers (5045, 5146)</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 5</div>
+          <div class="spec-question">What is the model and manufacturing year of your drone?</div>
+          <div class="spec-example">eg. iFlight Nazgul5 V2 — 2023</div>
+        </div>
+      </div>
+
+      <!-- ROBOT SPECS -->
+      <div class="spec-category robot reveal">
+        <h3 class="spec-category-title">🤖 GROUND WARRIOR'S ARENA — Robot Specs</h3>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 1</div>
+          <div class="spec-question">What is the type of your robot and its dimensions?</div>
+          <div class="spec-example">eg. Wheeled robot — 30 cm × 30 cm × 30 cm</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 2</div>
+          <div class="spec-question">What type of motors are used in your robot?</div>
+          <div class="spec-example">eg. DC geared motors</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 3</div>
+          <div class="spec-question">What type of battery or power source do you use?</div>
+          <div class="spec-example">eg. 12V battery or 11.1V Li-Po battery</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 4</div>
+          <div class="spec-question">What is the total weight of your robot?</div>
+          <div class="spec-example">eg. 3 kg – 5 kg</div>
+        </div>
+
+        <div class="spec-item">
+          <div class="spec-q">Question 5</div>
+          <div class="spec-question">How is your robot controlled?</div>
+          <div class="spec-example">eg. Wireless remote control only allowed</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="register">
+    <div class="section-label">Join The Battle</div>
+    <h2 class="section-title">Register <span>Now</span></h2>
+    <div class="section-line"></div>
+
+    <div class="register-wrapper reveal" style="margin: 0 auto;">
+      <p
+        style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:4px;color:#5a8aaa;text-transform:uppercase;">
+        Registration Fee</p>
+      <div class="fee-badge">₹500</div>
+      <p style="font-family:'Orbitron',monospace;font-size:0.85rem;color:#7aa8c8;letter-spacing:2px;">PER TEAM · PER
+        EVENT</p>
+
+      <p class="register-note">
+        Scan the QR code at the venue or contact the Electronics Club for pre-registration.<br>
+        Bring your robot / drone on the day of the event for inspection before the race begins.
+      </p>
+
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;">
+        <div
+          style="text-align:center;padding:1.5rem 2rem;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.2);">
+          <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:900;color:var(--drone-color);">AERO
+            BLAZE</div>
+          <div style="font-size:0.8rem;color:#5a8aaa;margin-top:0.3rem;letter-spacing:2px;">DRONE RACE</div>
+          <div
+            style="font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--gold);margin-top:0.5rem;">
+            ₹10K</div>
+          <div style="font-size:0.7rem;color:#5a8aaa;letter-spacing:2px;">TOP PRIZE</div>
+        </div>
+        <div
+          style="text-align:center;padding:1.5rem 2rem;background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.2);">
+          <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:900;color:var(--robot-color);">GWA
+          </div>
+          <div style="font-size:0.8rem;color:#5a8aaa;margin-top:0.3rem;letter-spacing:2px;">ROBOT RACE</div>
+          <div
+            style="font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--gold);margin-top:0.5rem;">
+            ₹5K</div>
+          <div style="font-size:0.7rem;color:#5a8aaa;letter-spacing:2px;">TOP PRIZE</div>
+        </div>
+      </div>
+
+      <div id="register-action-container">
+        <a href="#" id="main-register-btn" class="btn-primary" style="font-size:0.85rem;padding:1.1rem 3rem;"
+          onclick="showRegistrationOptions(event)">⚡ REGISTER YOUR TEAM</a>
+
+        <div id="registration-options" style="display: none; flex-direction: column; align-items: center; gap: 1rem;">
+          <div
+            style="font-family:'Orbitron',monospace;font-size:1.1rem;color:#e0e8f0;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:2px;">
+            Select Your Event</div>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+            <!-- Replace '#' with your Google Form URL for the Drone Race -->
+            <a href="#" target="_blank" class="btn-primary"
+              style="background: linear-gradient(135deg, var(--drone-color), #0077aa); padding: 1rem 2rem;">🚁 AERO
+              BLAZE (DRONE)</a>
+
+            <!-- Replace '#' with your Google Form URL for the Robot Race -->
+            <a href="#" target="_blank" class="btn-primary"
+              style="background: linear-gradient(135deg, var(--robot-color), #cc4400); padding: 1rem 2rem;">🤖 GWA
+              (ROBOT)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-college">Kings College of Engineering</div>
+    <div class="footer-dept">Department of Electronics &amp; Communication Engineering</div>
+    <div style="font-size:0.85rem;color:#4a6080;margin-bottom:1.5rem;line-height:1.7;">
+      Punalkulam, Gandharavakottai, Near Thanjavur · Pudukkottai 613 303<br>
+      Affiliated to Anna University · AICTE Approved · NAAC Accredited
+    </div>
+    <div class="footer-bottom">© 2026 Electronics Club · Kings College of Engineering · All Rights Reserved</div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Particles
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    for (let i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.5 + 0.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        a: Math.random() * 0.5 + 0.2
+      });
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0,200,255,${p.a})`;
+        ctx.fill();
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // Countdown
+    function updateCountdown() {
+      const target = new Date('2026-03-30T09:00:00+05:30').getTime();
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+      document.getElementById('cd-hrs').textContent = String(h).padStart(2, '0');
+      document.getElementById('cd-min').textContent = String(m).padStart(2, '0');
+      document.getElementById('cd-sec').textContent = String(s).padStart(2, '0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 100);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+
+    // Registration Events 
+    function showRegistrationOptions(e) {
+      e.preventDefault();
+      document.getElementById('main-register-btn').style.display = 'none';
+      document.getElementById('registration-options').style.display = 'flex';
+    }
+
+    // Cursor hover effects
+    document.querySelectorAll('a, button, .btn-primary, .btn-outline, .modal-close').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover-effect'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover-effect'));
+    });
+
+    // Brochure Modal Logic
+    const brochureModal = document.getElementById('brochure-modal');
+
+    function openBrochure(e) {
+      e.preventDefault();
+      brochureModal.style.display = 'flex';
+      // Small timeout to allow display: flex to apply before opacity transition
+      setTimeout(() => {
+        brochureModal.classList.add('active');
+      }, 10);
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeBrochure(e) {
+      if (e) e.preventDefault();
+      brochureModal.classList.remove('active');
+      // Wait for transition to finish before hiding display
+      setTimeout(() => {
+        brochureModal.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
+      }, 300);
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && brochureModal.classList.contains('active')) {
+        closeBrochure();
+      }
+    });
+  </script>
+</body>
+
+</html>
